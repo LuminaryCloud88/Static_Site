@@ -43,9 +43,9 @@ def split_nodes_image(old_nodes):
                     if parts_before != "":
                         text = TextNode(parts_before, TextType.TEXT, url=None)
                         new_nodes.append(text)
-                        image = TextNode(alt_text, TextType.IMAGE, url)
-                        new_nodes.append(image)
-                        current_text = parts_after
+                    image = TextNode(alt_text, TextType.IMAGE, url)
+                    new_nodes.append(image)
+                    current_text = parts_after
                 if current_text != "":
                     leftovers = TextNode(current_text, TextType.TEXT, url=None)
                     new_nodes.append(leftovers)
@@ -73,9 +73,9 @@ def split_nodes_link(old_nodes):
                     if parts_before != "":
                         text = TextNode(parts_before, TextType.TEXT, url=None)
                         new_nodes.append(text)
-                        link = TextNode(link_text, TextType.LINK, url)
-                        new_nodes.append(link)
-                        current_text = parts_after
+                    link = TextNode(link_text, TextType.LINK, url)
+                    new_nodes.append(link)
+                    current_text = parts_after
                 if current_text != "":
                     leftovers = TextNode(current_text, TextType.TEXT, url=None)
                     new_nodes.append(leftovers)
