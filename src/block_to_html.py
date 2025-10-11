@@ -11,11 +11,6 @@ def text_to_children(text):
 
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
-    print("DEBUG - Blocks:")
-    for i, block in enumerate(blocks):
-        print(f"Block {i}: {repr(block)}")
-        print(f"Type: {block_to_block_type(block)}")
-    print("---")
     block_nodes = []
 
     for block in blocks:
@@ -60,17 +55,18 @@ def markdown_to_html_node(markdown):
             node = ParentNode(tag="pre", children=[ParentNode(tag="code", children=[code_child])])
         
         elif block_type == BlockType.QUOTE:
-            lines = block.splitlines()
-            cleaned_lines = []
-            for line in lines:
-                stripped = line.strip()
-                if stripped.startswith("> "):
-                    cleaned_lines.append(stripped[2:])
-                elif stripped.startswith(">"):
-                    cleaned_lines.append(stripped[1:])
-            cleaned_text = " ".join(cleaned_lines)
-            children = text_to_children(cleaned_text)
-            node = ParentNode(tag="blockquote", children=children)
+            lines = [l.strip() for l in block.splitlines() if l.strip()]
+            cleaned = []
+            for l in lines:
+                if l.startswith("> "):
+                    cleaned.append(l[2:])
+                elif l.startswith(">"):
+                    cleaned.append(l[1:])
+            # blockquote contains only the first line of the quote
+            quote_text = cleaned[0].strip()
+            node = ParentNode(tag="blockquote", children=text_to_children(quote_text))
+            
+            
 
         elif block_type == BlockType.UNORDERED_LIST:
             items = block.splitlines()
