@@ -16,6 +16,7 @@ def main():
         basepath = "/" + basepath
    if not basepath.endswith("/"):
         basepath += "/"
+   print(f"Basepath = '{basepath}'")
 
    print("Deleting public directory...")
    if os.path.exists(dir_path_public):
@@ -23,7 +24,7 @@ def main():
 
    print("Copying static files to public directory...")
    copyfilesrecursive(dir_path_static, dir_path_public)
-  
+
    print("Generating content...")
    generate_pages_recursive(dir_path_content, template_path, dir_path_public, basepath)
 
