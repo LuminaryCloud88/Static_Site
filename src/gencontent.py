@@ -1,6 +1,7 @@
 import os
 from  block_to_html import markdown_to_html_node
 from split_blocks import markdown_to_blocks
+from pathlib import Path
 
 def generate_page(from_path, template_path, dest_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}.")
@@ -12,14 +13,8 @@ def generate_page(from_path, template_path, dest_path):
     template = template_file.read()
     template_file.close()
 
-    blocks = markdown_to_blocks(markdown_content)
-    for i, b in enumerate(blocks):
-        if b.lstrip().startswith(">"):
-            print("QUOTE BLOCK:", repr(b))
-
     node = markdown_to_html_node(markdown_content)
     html = node.to_html()
-    print("<blockquote" in html, html.find("<blockquote"))
 
     title = extract_title(markdown_content)
     template = template.replace("{{ Title }}", title)
@@ -37,3 +32,13 @@ def extract_title(md):
         if line.startswith("# "):
             return line[2:]
     raise ValueError("no title found")
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+   for filename in os.listdir(dir_path_content):
+       from_path = os.path.join(dir_path_content, filename)
+       dest_path = os.path.join(dest_dir_path, filename)
+       if os.path.isfile(from_path):
+           dest_path = Path(dest_path).with_suffix(".html")
+           generate_page(from_path, template_path, dest_path)
+       else:
+           generate_pages_recursive(from_path, template_path, dest_path)

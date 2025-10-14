@@ -19,7 +19,7 @@ def block_to_block_type(block):
         return BlockType.HEADING
 
     # Code block
-    if block.startswith("```") and block.endswith("```"):
+    if len(lines) > 1 and lines[0].startswith("```") and lines[-1].startswith("```"):
         return BlockType.CODE
 
     # Quote (allow '>' or '> ' and ignore empties)
